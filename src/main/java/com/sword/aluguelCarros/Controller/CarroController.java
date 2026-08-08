@@ -30,7 +30,7 @@ public class CarroController {
             var result = carroService.findAll();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -40,7 +40,7 @@ public class CarroController {
             var result = carroService.findById(id);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -52,8 +52,7 @@ public class CarroController {
             return new ResponseEntity<>(result,
                     HttpStatus.CREATED);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null,
-                    HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -74,7 +73,7 @@ public class CarroController {
             var result = carroService.update(id, carroUpdate);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 }

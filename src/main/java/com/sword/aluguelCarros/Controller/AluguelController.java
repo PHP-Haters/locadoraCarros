@@ -23,7 +23,7 @@ public class AluguelController {
             var result = aluguelService.findAll();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -33,7 +33,7 @@ public class AluguelController {
             var result = aluguelService.findById(id);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -43,7 +43,7 @@ public class AluguelController {
             var result = aluguelService.save(aluguel);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -58,13 +58,12 @@ public class AluguelController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Aluguel> update(@PathVariable Integer id,
-                                          @RequestBody Aluguel aluguelUpdate) {
+    public ResponseEntity<Aluguel> update(@PathVariable Integer id, @RequestBody Aluguel aluguelUpdate) {
         try {
             var result = aluguelService.update(id, aluguelUpdate);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 }

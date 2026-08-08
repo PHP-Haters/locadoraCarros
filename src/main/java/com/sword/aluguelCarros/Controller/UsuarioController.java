@@ -29,7 +29,7 @@ public class UsuarioController {
             var result = usuarioService.findAll();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -39,7 +39,7 @@ public class UsuarioController {
             var result = usuarioService.findById(id);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -51,8 +51,7 @@ public class UsuarioController {
             return new ResponseEntity<>(result,
                     HttpStatus.CREATED);
         } catch (Exception ex) {
-            return new ResponseEntity<>(null,
-                    HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
