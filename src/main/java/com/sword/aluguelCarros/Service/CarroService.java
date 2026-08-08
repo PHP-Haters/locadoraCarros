@@ -1,7 +1,7 @@
 package com.sword.aluguelCarros.Service;
 
 import com.sword.aluguelCarros.Model.Carro;
-import com.sword.aluguelCarros.CarroRepository;
+import com.sword.aluguelCarros.Repository.CarroRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
