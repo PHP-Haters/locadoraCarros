@@ -2,6 +2,7 @@ package com.sword.aluguelCarros.Repository;
 
 import com.sword.aluguelCarros.Model.Aluguel;
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Repository
 public class AluguelRepository {
     // Estrutura em memória
     private final List<Aluguel> alugueis = new ArrayList<>();

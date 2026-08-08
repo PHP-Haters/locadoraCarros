@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.sword.aluguelCarros.Model.Carro;
 import org.springframework.stereotype.Repository;
 
+@Repository
 public class CarroRepository {
     // Estrutura que serve como um banco de dados em memória
     private final List<Carro> carros = new ArrayList<>();
