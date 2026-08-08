@@ -12,7 +12,7 @@ public class Carro {
     private String nome;
     private String marca;
     private Float valorDiaria;
-    private String disponivel;
+    private Boolean disponivel;
 
     public Integer getId() {
         return id;
@@ -46,11 +46,11 @@ public class Carro {
         this.valorDiaria = valorDiaria;
     }
 
-    public String getDisponivel() {
+    public Boolean getDisponivel() {
         return disponivel;
     }
 
-    public void setDisponivel(String disponivel) {
+    public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
     }
 
