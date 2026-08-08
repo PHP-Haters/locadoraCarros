@@ -1,7 +1,7 @@
 package com.sword.aluguelCarros.Controller;
 
 import com.sword.aluguelCarros.Model.Carro;
-import com.sword.aluguelCarros.Service.Carro;
+import com.sword.aluguelCarros.Service.CarroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
