@@ -1,5 +1,6 @@
 package com.sword.aluguelCarros.Service;
 
+import com.sword.aluguelCarros.Model.Carro;
 import com.sword.aluguelCarros.Model.Usuario;
 import com.sword.aluguelCarros.Repository.CarroRepository;
 import com.sword.aluguelCarros.Repository.UsuarioRepository;
@@ -16,7 +17,11 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     public List<Usuario> findAll() {
-        return usuarioRepository.getUsuario();
+        return usuarioRepository.getUsuarios();
+    }
+
+    public Usuario findByEmail(String email) {
+        return usuarioRepository.getUsuarioPorEmail(email);
     }
 
     public Usuario findById(Integer id) {
@@ -31,4 +36,7 @@ public class UsuarioService {
         usuarioRepository.delete(id);
     }
 
+    public Usuario update(Integer id, Usuario usuarioUpdate) {
+        return usuarioRepository.update(id, usuarioUpdate);
+    }
 }
