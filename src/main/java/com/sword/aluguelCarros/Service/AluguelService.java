@@ -5,10 +5,12 @@ import com.sword.aluguelCarros.Model.Carro;
 import com.sword.aluguelCarros.Repository.AluguelRepository;
 import com.sword.aluguelCarros.Repository.CarroRepository;
 import com.sword.aluguelCarros.Repository.UsuarioRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Service
 public class AluguelService {
     private final AluguelRepository aluguelRepository;
     private final CarroRepository carroRepository;
