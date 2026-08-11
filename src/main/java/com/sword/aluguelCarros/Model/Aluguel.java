@@ -1,67 +1,41 @@
 package com.sword.aluguelCarros.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Entity
+@Table(name = "tb_aluguel")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Aluguel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "usuario_id", nullable = false)
     private Integer usuarioId;
+
+    @Column(name = "carro_id", nullable = false)
     private Integer carroId;
+
+    @Column(name = "data_inicio", nullable = false)
     private LocalDate dataInicio;
+
+    @Column(name = "data_final", nullable = false)
     private LocalDate dataFinal;
+
+    @Column(name = "valor_total", nullable = false)
     private Double valorTotal;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUsuarioId() {
-        return usuarioId;
-    }
-
-    public void setUsuarioId(Integer usuarioId) {
-        this.usuarioId = usuarioId;
-    }
-
-    public Integer getCarroId() {
-        return carroId;
-    }
-
-    public void setCarroId(Integer carroId) {
-        this.carroId = carroId;
-    }
-
-    public LocalDate getDataInicio() {
-        return dataInicio;
-    }
-
-    public void setDataInicio(LocalDate dataInicio) {
-        this.dataInicio = dataInicio;
-    }
-
-    public LocalDate getDataFinal() {
-        return dataFinal;
-    }
-
-    public void setDataFinal(LocalDate dataFinal) {
-        this.dataFinal = dataFinal;
-    }
-
-    public Double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(Double valorTotal) {
-        this.valorTotal = valorTotal;
-    }
 }
