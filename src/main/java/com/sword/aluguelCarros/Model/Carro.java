@@ -1,57 +1,36 @@
 package com.sword.aluguelCarros.Model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 
+@Entity
+@Table(name = "tb_carro")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Carro {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false, length = 100)
     private String nome;
+
+    @Column(nullable = false, length = 50)
     private String marca;
+
+    @Column(name = "valor_diaria", nullable = false)
     private Float valorDiaria;
+
+    @Column(nullable = false)
     private Boolean disponivel;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public Float getValorDiaria() {
-        return valorDiaria;
-    }
-
-    public void setValorDiaria(Float valorDiaria) {
-        this.valorDiaria = valorDiaria;
-    }
-
-    public Boolean getDisponivel() {
-        return disponivel;
-    }
-
-    public void setDisponivel(Boolean disponivel) {
-        this.disponivel = disponivel;
-    }
-
 }
