@@ -88,6 +88,11 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/teste")
+    public ResponseEntity<String> teste() {
+        return ResponseEntity.ok("Backend conectado com sucesso!");
+    }
+
     // logn
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(
