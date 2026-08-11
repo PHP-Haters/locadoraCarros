@@ -9,6 +9,9 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+
+//só pra avisar que ta funcionando essa desgraça, Jóia.
+
 @Service
 public class JwtService {
 

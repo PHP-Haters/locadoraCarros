@@ -45,10 +45,7 @@ public class UsuarioService {
         return usuarioRepository.update(id, usuarioUpdate);
     }
 
-    // =========================
-    // CADASTRO
-    // =========================
-
+    //cadastro
     public Usuario cadastrar(Usuario usuario) {
 
         Usuario usuarioExistente =
@@ -65,10 +62,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    // =========================
-    // LOGIN
-    // =========================
-
+    // login
     public String login(String email, String senha) {
 
         Usuario usuario =
