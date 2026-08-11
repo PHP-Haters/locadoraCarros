@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -68,4 +69,48 @@ public class UsuarioController {
         }
     }
 
+    // cadastro
+    @PostMapping("/cadastro")
+    public ResponseEntity<Usuario> cadastro(
+            @RequestBody Usuario usuario) {
+
+        try {
+            Usuario novoUsuario =
+                    usuarioService.cadastrar(usuario);
+
+            return new ResponseEntity<>(
+                    novoUsuario,
+                    HttpStatus.CREATED
+            );
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/teste")
+    public ResponseEntity<String> teste() {
+        return ResponseEntity.ok("Backend conectado com sucesso!");
+    }
+
+    // logn
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(
+            @RequestBody Usuario usuario) {
+
+        try {
+            String token =
+                    usuarioService.login(
+                            usuario.getEmail(),
+                            usuario.getSenha()
+                    );
+
+            return ResponseEntity.ok(
+                    Map.of("token", token)
+            );
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
