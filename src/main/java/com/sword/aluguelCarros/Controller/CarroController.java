@@ -2,6 +2,7 @@ package com.sword.aluguelCarros.Controller;
 
 import com.sword.aluguelCarros.Model.Carro;
 import com.sword.aluguelCarros.Service.CarroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,49 +10,54 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/carros")
+@RequestMapping("/carro")
 public class CarroController {
 
     @Autowired
     private CarroService carroService;
 
-    @GetMapping("/findAll")
+    // Criar um novo carro
+    @PostMapping
+    public ResponseEntity<String> saveCarro(@RequestBody @Valid Carro carro) {
+        String response = carroService.saveCarro(carro);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // Listar todos os carros
+    @GetMapping
     public ResponseEntity<List<Carro>> findAll() {
-        var result = carroService.findAll();
+        List<Carro> result = carroService.findAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/findById/{id}")
+    // Buscar carro por ID
+    @GetMapping("/{id}")
     public ResponseEntity<Carro> findById(@PathVariable Integer id) {
-        var result = carroService.findById(id);
+        Carro result = carroService.findById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // O retorno de carroService.saveCarro é String
-    @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody Carro carro) {
-        String result = carroService.saveCarro(carro);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        carroService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Carro> update(@PathVariable Integer id,
-                                        @RequestBody Carro carroUpdate) {
-        var result = carroService.update(id, carroUpdate);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
+    // Listar carros disponíveis
     @GetMapping("/disponiveis")
     public ResponseEntity<List<Carro>> findByDisponiveis() {
-        var result = carroService.findByDisponiveis();
+        List<Carro> result = carroService.findByDisponiveis();
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    // Atualizar carro
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody @Valid Carro carroAtualizado) {
+        carroService.update(id, carroAtualizado);
+        return new ResponseEntity<>("Carro atualizado com sucesso.", HttpStatus.OK);
+    }
+
+    // Deletar carro
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        carroService.delete(id);
+        return ResponseEntity.noContent().build(); // status 204
     }
 }

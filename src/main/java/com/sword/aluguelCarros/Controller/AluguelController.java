@@ -2,6 +2,7 @@ package com.sword.aluguelCarros.Controller;
 
 import com.sword.aluguelCarros.Model.Aluguel;
 import com.sword.aluguelCarros.Service.AluguelService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,48 +10,54 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/alugueis")
+@RequestMapping("/aluguel")
 public class AluguelController {
 
     @Autowired
     private AluguelService aluguelService;
 
-    @GetMapping("/findAll")
+    // Criar um novo aluguel
+    @PostMapping
+    public ResponseEntity<String> saveAluguel(@RequestBody @Valid Aluguel aluguel) {
+        String response = aluguelService.saveAluguel(aluguel);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // Listar todos os aluguéis
+    @GetMapping
     public ResponseEntity<List<Aluguel>> findAll() {
-        var result = aluguelService.findAll();
+        List<Aluguel> result = aluguelService.findAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/findById/{id}")
+    // Buscar aluguel por ID
+    @GetMapping("/{id}")
     public ResponseEntity<Aluguel> findById(@PathVariable Integer id) {
-        var result = aluguelService.findById(id);
+        Aluguel result = aluguelService.findById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // O retorno de saveAluguel no AluguelService é String
-    @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody Aluguel aluguel) {
-        String result = aluguelService.saveAluguel(aluguel);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Aluguel> update(@PathVariable Integer id, @RequestBody Aluguel aluguelUpdate) {
-        var result = aluguelService.update(id, aluguelUpdate);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        aluguelService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
+    // Listar todos os aluguéis de um usuário
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Aluguel>> findByUsuarioId(@PathVariable Integer usuarioId) {
-        var result = aluguelService.findByUsuarioId(usuarioId);
+        List<Aluguel> result = aluguelService.findByUsuarioId(usuarioId);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    // Atualizar aluguel
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody @Valid Aluguel aluguelAtualizado) {
+        aluguelService.update(id, aluguelAtualizado);
+        return new ResponseEntity<>("Aluguel atualizado com sucesso.", HttpStatus.OK);
+    }
+
+    // Deletar aluguel
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        aluguelService.delete(id);
+        return ResponseEntity.noContent().build(); // status 204
     }
 }
