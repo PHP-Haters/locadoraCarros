@@ -1,5 +1,6 @@
 package com.sword.aluguelCarros.Model;
 
+import com.sword.aluguelCarros.Model.Enum.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,5 +33,5 @@ public class Usuario {
     private String senha;
 
     @Column(nullable = false, length = 20)
-    private String role;
+    private UserRole role;
 }
