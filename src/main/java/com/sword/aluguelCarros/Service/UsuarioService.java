@@ -1,6 +1,7 @@
 package com.sword.aluguelCarros.Service;
 
 import com.sword.aluguelCarros.ExceptionHandlers.GenericExceptions;
+import com.sword.aluguelCarros.Model.Enum.UserRole;
 import com.sword.aluguelCarros.Model.Usuario;
 import com.sword.aluguelCarros.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class UsuarioService {
                 throw new GenericExceptions.AlreadyExists("E-mail já cadastrado no sistema.");
             }
 
-            if (novoUsuario.getRole() == null || novoUsuario.getRole().isBlank()) {
-                novoUsuario.setRole("USER");
+            if (novoUsuario.getRole() == null) {
+                novoUsuario.setRole(UserRole.USER);
             }
 
             usuarioRepository.save(novoUsuario);
