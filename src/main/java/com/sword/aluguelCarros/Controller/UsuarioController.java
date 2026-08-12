@@ -2,6 +2,7 @@ package com.sword.aluguelCarros.Controller;
 
 import com.sword.aluguelCarros.Model.Usuario;
 import com.sword.aluguelCarros.Service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,64 +11,72 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/findAll")
+    // Criar um novo usuário
+    @PostMapping
+    public ResponseEntity<String> saveUsuario(@RequestBody @Valid Usuario usuario) {
+        String response = usuarioService.saveUsuario(usuario);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // Listar todos os usuários
+    @GetMapping
     public ResponseEntity<List<Usuario>> findAll() {
-        var result = usuarioService.findAll();
+        List<Usuario> result = usuarioService.findAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/findById/{id}")
+    // Buscar usuário por ID
+    @GetMapping("/{id}")
     public ResponseEntity<Usuario> findById(@PathVariable Integer id) {
-        var result = usuarioService.findById(id);
+        Usuario result = usuarioService.findById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/findByEmail")
+    // Buscar usuário por E-mail
+    @GetMapping("/email")
     public ResponseEntity<Usuario> findByEmail(@RequestParam String email) {
-        var result = usuarioService.findByEmail(email);
+        Usuario result = usuarioService.findByEmail(email);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // O retorno de saveUsuario no UsuarioService é String
-    @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody Usuario usuario) {
-        String result = usuarioService.saveUsuario(usuario);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    // Atualizar usuário
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody @Valid Usuario usuarioAtualizado) {
+        usuarioService.update(id, usuarioAtualizado);
+        return new ResponseEntity<>("Usuário atualizado com sucesso.", HttpStatus.OK);
     }
 
-    // Método de cadastro reutilizando a resposta String
-    @PostMapping("/cadastro")
-    public ResponseEntity<String> cadastro(@RequestBody Usuario usuario) {
-        String result = usuarioService.cadastrar(usuario);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Usuario> update(@PathVariable Integer id, @RequestBody Usuario usuarioUpdate) {
-        var result = usuarioService.update(id, usuarioUpdate);
-        return ResponseEntity.ok(result);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    // Deletar usuário
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // status 204
     }
 
+    // Cadastro de usuário
+    @PostMapping("/cadastro")
+    public ResponseEntity<String> cadastro(@RequestBody @Valid Usuario usuario) {
+        String response = usuarioService.cadastrar(usuario);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // Login de usuário
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Usuario usuario) {
         String tokenOuMensagem = usuarioService.login(usuario.getEmail(), usuario.getSenha());
         return ResponseEntity.ok(Map.of("token", tokenOuMensagem));
     }
 
+    // Endpoint de teste de conexão
     @GetMapping("/teste")
     public ResponseEntity<String> teste() {
         return ResponseEntity.ok("Backend conectado com sucesso!");
