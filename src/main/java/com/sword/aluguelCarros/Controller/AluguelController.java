@@ -41,7 +41,7 @@ public class AluguelController {
     @PostMapping("/save")
     public ResponseEntity<Aluguel> save(@RequestBody Aluguel aluguel) {
         try {
-            var result = aluguelService.save(aluguel);
+            var result = aluguelService.saveAluguel(aluguel);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
