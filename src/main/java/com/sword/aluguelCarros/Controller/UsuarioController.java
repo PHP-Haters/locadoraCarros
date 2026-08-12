@@ -42,7 +42,7 @@ public class UsuarioController {
     @PostMapping("/save")
     public ResponseEntity<Usuario> save(@RequestBody Usuario usuario) {
         try {
-            var result = usuarioService.save(usuario);
+            var result = usuarioService.saveUsuario(usuario);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();

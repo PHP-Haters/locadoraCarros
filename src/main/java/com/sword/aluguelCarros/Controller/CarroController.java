@@ -43,7 +43,7 @@ public class CarroController {
     public ResponseEntity<Carro> save(
             @RequestBody Carro carro) {
         try {
-            var result = carroService.save(carro);
+            var result = carroService.saveCarro(carro);
             return new ResponseEntity<>(result,
                     HttpStatus.CREATED);
         } catch (Exception ex) {
