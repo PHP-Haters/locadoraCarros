@@ -4,6 +4,7 @@ import com.sword.aluguelCarros.Filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -23,22 +25,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http
-    ) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-
-                // =================================================
-                // Desabilita CSRF
-                // =================================================
-
                 .csrf(csrf -> csrf.disable())
-
-
-                // =================================================
-                // JWT é Stateless
-                // =================================================
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -46,58 +36,23 @@ public class SecurityConfig {
                         )
                 )
 
-
-                // =================================================
-                // REGRAS DE AUTORIZAÇÃO
-                // =================================================
-
                 .authorizeHttpRequests(auth -> auth
 
-                        // -----------------------------------------
                         // Rotas públicas
-                        // -----------------------------------------
-
                         .requestMatchers(
-                                "/usuario/login"
+                                "/usuario/login",
+                                "/usuario/cadastro",
+                                "teste"
                         ).permitAll()
 
-                        .requestMatchers(
-                                "/usuario/cadastro"
-                        ).permitAll()
-
-
-                        // -----------------------------------------
-                        // Rotas exclusivas do ADMIN
-                        // -----------------------------------------
-
-                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
-
-                        .requestMatchers(
-                                "/carro/cadastrar"
-                        ).hasRole("ADMIN")
-
-                        .requestMatchers(
-                                "/carro/excluir/**"
-                        ).hasRole("ADMIN")
-
-
-                        // -----------------------------------------
-                        // Qualquer usuário autenticado
-                        // -----------------------------------------
-
+                        // Todo o restante precisa estar autenticado
                         .anyRequest().authenticated()
                 )
-
-
-                // =================================================
-                // Adiciona nosso filtro JWT
-                // =================================================
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
-
 
         return http.build();
     }

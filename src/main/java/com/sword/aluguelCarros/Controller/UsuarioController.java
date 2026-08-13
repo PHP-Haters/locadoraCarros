@@ -75,10 +75,4 @@ public class UsuarioController {
         String tokenOuMensagem = usuarioService.login(usuario.getEmail(), usuario.getSenha());
         return ResponseEntity.ok(Map.of("token", tokenOuMensagem));
     }
-
-    // Endpoint de teste de conexão
-    @GetMapping("/teste")
-    public ResponseEntity<String> teste() {
-        return ResponseEntity.ok("Backend conectado com sucesso!");
-    }
 }
