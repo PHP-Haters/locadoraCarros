@@ -1,12 +1,7 @@
 package com.sword.aluguelCarros.Model;
 
 import com.sword.aluguelCarros.Model.Enum.UserRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -32,6 +27,16 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserRole role;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        // Define o papel com base no campo 'role'
+        if(this.role == null) {
+            this.role = UserRole.USER;
+        }
+    }
 }
