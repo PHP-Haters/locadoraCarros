@@ -94,10 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // =====================================================
 
         SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority(
-                        "ROLE_" + role
-                );
-
+                new SimpleGrantedAuthority("ROLE_" + role);
 
         // =====================================================
         // 7. Cria a autenticação
