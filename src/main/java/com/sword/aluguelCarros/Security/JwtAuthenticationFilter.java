@@ -1,4 +1,4 @@
-package com.sword.aluguelCarros.Filter;
+package com.sword.aluguelCarros.Security;
 
 import com.sword.aluguelCarros.Service.JwtService;
 
