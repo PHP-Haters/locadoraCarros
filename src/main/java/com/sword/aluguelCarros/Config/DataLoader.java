@@ -1,7 +1,10 @@
 package com.sword.aluguelCarros.Config;
 
 import com.sword.aluguelCarros.Model.Carro;
+import com.sword.aluguelCarros.Model.Enum.UserRole;
+import com.sword.aluguelCarros.Model.Usuario;
 import com.sword.aluguelCarros.Repository.CarroRepository;
+import com.sword.aluguelCarros.Repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class DataLoader {
 
     @Bean
-    CommandLineRunner loadData(CarroRepository carroRepository) {
+    CommandLineRunner carrosDataLoader(CarroRepository carroRepository) {
         return args -> {
 
             if (carroRepository.count() == 0) {
@@ -103,6 +106,30 @@ public class DataLoader {
                         "Audi",
                         300.0F,
                         true
+                ));
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner usuariosDataLoader(UsuarioRepository usuarioRepository) {
+        return args -> {
+
+            if (usuarioRepository.count() == 0) {
+                usuarioRepository.save(new Usuario(
+                        null,
+                        "Admin",
+                        "admin@gmail.com",
+                        "admin123",
+                        UserRole.ADMIN
+                ));
+
+                usuarioRepository.save(new Usuario(
+                        null,
+                        "Fabio",
+                        "fabio@gmail.com",
+                        "fabio123",
+                        UserRole.USER
                 ));
             }
         };
