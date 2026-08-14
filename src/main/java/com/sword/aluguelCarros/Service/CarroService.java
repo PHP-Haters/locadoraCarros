@@ -39,7 +39,7 @@ public class CarroService {
     public List<Carro> findAll() {
         List<Carro> carros = carroRepository.findAll();
         if (carros.isEmpty()) {
-            throw new GenericExceptions.General(
+            throw new GenericExceptions.NotFound(
                     "Não existem carros cadastrados."
             );
         } else {
