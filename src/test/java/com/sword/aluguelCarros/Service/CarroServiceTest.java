@@ -109,7 +109,7 @@ class CarroServiceTest {
     void deveLancarExcecaoGeneralQuandoListaDeCarrosEstiverVazia() {
         when(carroRepository.findAll()).thenReturn(new ArrayList<>()); // Lista vazia
 
-        assertThrows(GenericExceptions.General.class, () -> {
+        assertThrows(GenericExceptions.NotFound.class, () -> {
             carroService.findAll();
         });
     }
