@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AluguelController {
     private AluguelService aluguelService;
 
     // Criar um novo aluguel
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ResponseEntity<String> saveAluguel(@RequestBody @Valid Aluguel aluguel) {
         String response = aluguelService.saveAluguel(aluguel);
@@ -27,6 +29,7 @@ public class AluguelController {
     }
 
     // Listar todos os aluguéis
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Aluguel>> findAll() {
         List<Aluguel> result = aluguelService.findAll();
@@ -34,6 +37,7 @@ public class AluguelController {
     }
 
     // Buscar aluguel por ID
+    @PreAuthorize("@aluguelSecurity.podeAcessarAluguel(#id, authentication)")
     @GetMapping("/{id}")
     public ResponseEntity<Aluguel> findById(@PathVariable Integer id) {
         Aluguel result = aluguelService.findById(id);
@@ -41,6 +45,7 @@ public class AluguelController {
     }
 
     // Listar todos os aluguéis de um usuário
+    @PreAuthorize("@aluguelSecurity.podeAcessarAlugueisDoUsuario(#usuarioId, authentication)")
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Aluguel>> findByUsuarioId(@PathVariable Integer usuarioId) {
         List<Aluguel> result = aluguelService.findByUsuarioId(usuarioId);
@@ -48,6 +53,7 @@ public class AluguelController {
     }
 
     // Atualizar aluguel
+    @PreAuthorize("@aluguelSecurity.podeAcessarAluguel(#id, authentication)")
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody @Valid Aluguel aluguelAtualizado) {
         aluguelService.update(id, aluguelAtualizado);
@@ -55,6 +61,7 @@ public class AluguelController {
     }
 
     // Deletar aluguel
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         aluguelService.delete(id);
