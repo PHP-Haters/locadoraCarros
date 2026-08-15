@@ -1,0 +1,65 @@
+name: CI/CD Pipeline - Test & Deploy Bare Metal
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    name: Build, Test and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
+
+      # -------------------------------------------------------------
+      # 1. ETAPA DE TESTES (Qualquer falha aqui aborta o deploy)
+      # -------------------------------------------------------------
+      - name: Executar Testes Automatizados
+        run: mvn test
+
+      # -------------------------------------------------------------
+      # 2. ETAPA DE COMPILAÇÃO
+      # -------------------------------------------------------------
+      - name: Gerar Pacote JAR
+        run: mvn package -DskipTests # Os testes já rodaram na etapa anterior
+
+      # -------------------------------------------------------------
+      # 3. ETAPA DE DEPLOY
+      # -------------------------------------------------------------
+      - name: Enviar JAR para o Servidor Ubuntu
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "target/*.jar"
+          target: "/var/www/minha-api/"
+          strip_components: 1
+
+      - name: Atualizar Executável e Reiniciar Serviço
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            # Padroniza o nome do pacote para o systemd encontrar
+            mv /var/www/minha-api/*.jar /var/www/minha-api/app.jar
+            
+            # Reinicia o serviço
+            sudo systemctl restart minha-api
+            
+            # Checa o status do serviço
+            sudo systemctl status minha-api --no-pager
