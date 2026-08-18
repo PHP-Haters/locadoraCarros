@@ -41,45 +41,45 @@ class AluguelServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Preparando um Carro padrão para os testes
+        
         carroPadrao = new Carro();
         carroPadrao.setId(10);
         carroPadrao.setDisponivel(true);
-        carroPadrao.setValorDiaria(150.0f); // Colocando 'f' para evitar o erro de Double vs Float
+        carroPadrao.setValorDiaria(150.0f); 
 
-        // Preparando um Aluguel padrão para os testes
+        
         aluguelPadrao = new Aluguel();
         aluguelPadrao.setId(1);
         aluguelPadrao.setUsuarioId(5);
         aluguelPadrao.setCarroId(10);
         aluguelPadrao.setDataInicio(LocalDate.now());
-        aluguelPadrao.setDataFinal(LocalDate.now().plusDays(2)); // Aluguel de 2 dias
+        aluguelPadrao.setDataFinal(LocalDate.now().plusDays(2)); 
     }
 
-    // --- Testes para o método saveAluguel ---
+    
 
     @Test
     void deveSalvarAluguelComSucessoECalcularValorTotal() {
-        // Preparação
+        
         when(usuarioRepository.existsById(5)).thenReturn(true);
         when(carroRepository.findById(10)).thenReturn(Optional.of(carroPadrao));
 
-        // Ação
+        
         String resultado = aluguelService.saveAluguel(aluguelPadrao);
 
-        // Verificação
+        
         assertEquals("Aluguel realizado com sucesso", resultado);
-        assertEquals(300.0, aluguelPadrao.getValorTotal()); // 2 dias * 150.0
-        assertFalse(carroPadrao.getDisponivel()); // O carro deve ficar indisponível
+        assertEquals(300.0, aluguelPadrao.getValorTotal()); 
+        assertFalse(carroPadrao.getDisponivel()); 
 
-        // Verifica se o carro e o aluguel foram salvos no banco
+        
         verify(carroRepository, times(1)).save(carroPadrao);
         verify(aluguelRepository, times(1)).save(aluguelPadrao);
     }
 
     @Test
     void deveLancarExcecaoSeUsuarioNaoExistir() {
-        // Simulando que o usuário não existe no banco
+        
         when(usuarioRepository.existsById(5)).thenReturn(false);
 
         GenericExceptions.InvalidData exception = assertThrows(GenericExceptions.InvalidData.class, () -> {
@@ -87,12 +87,12 @@ class AluguelServiceTest {
         });
 
         assertEquals("Usuário informado não existe.", exception.getMessage());
-        verify(aluguelRepository, never()).save(any()); // Garante que não tentou salvar
+        verify(aluguelRepository, never()).save(any()); 
     }
 
     @Test
     void deveLancarExcecaoSeCarroNaoEstiverDisponivel() {
-        carroPadrao.setDisponivel(false); // Carro já está alugado
+        carroPadrao.setDisponivel(false); 
 
         when(usuarioRepository.existsById(5)).thenReturn(true);
         when(carroRepository.findById(10)).thenReturn(Optional.of(carroPadrao));
@@ -106,7 +106,7 @@ class AluguelServiceTest {
 
     @Test
     void deveLancarExcecaoSeDataFinalForAnteriorADataInicio() {
-        // Colocando a data final antes da data de início
+        
         aluguelPadrao.setDataFinal(LocalDate.now().minusDays(1));
 
         when(usuarioRepository.existsById(5)).thenReturn(true);
@@ -119,7 +119,7 @@ class AluguelServiceTest {
         assertEquals("A data final deve ser posterior à data de início.", exception.getMessage());
     }
 
-    // --- Testes para o método findAll ---
+    
 
     @Test
     void deveRetornarListaDeAlugueis() {
@@ -131,11 +131,11 @@ class AluguelServiceTest {
         assertEquals(1, resultado.size());
     }
 
-    // --- Testes para o método update ---
+    
 
     @Test
     void deveAtualizarAluguelERecalcularValor() {
-        // Aluguel que vem na requisição com novas datas (agora 4 dias)
+        
         Aluguel novosDados = new Aluguel();
         novosDados.setDataInicio(LocalDate.now());
         novosDados.setDataFinal(LocalDate.now().plusDays(4));
@@ -144,35 +144,35 @@ class AluguelServiceTest {
         when(carroRepository.findById(10)).thenReturn(Optional.of(carroPadrao));
         when(aluguelRepository.save(any(Aluguel.class))).thenReturn(aluguelPadrao);
 
-        // Ação
+        
         Aluguel resultado = aluguelService.update(1, novosDados);
 
-        // Verificação: 4 dias * 150 = 600
+        
         assertEquals(600.0, resultado.getValorTotal());
         verify(aluguelRepository, times(1)).save(aluguelPadrao);
     }
 
-    // --- Testes para o método delete ---
+    
 
     @Test
     void deveDeletarAluguelETornarCarroDisponivelNovamente() {
-        // Quando o delete é chamado, o carro do aluguel (id 10) deve voltar a ficar disponível
+        
         carroPadrao.setDisponivel(false);
 
         when(aluguelRepository.findById(1)).thenReturn(Optional.of(aluguelPadrao));
         when(carroRepository.findById(10)).thenReturn(Optional.of(carroPadrao));
         doNothing().when(aluguelRepository).delete(aluguelPadrao);
 
-        // Ação
+       
         aluguelService.delete(1);
 
-        // Verificação
-        assertTrue(carroPadrao.getDisponivel()); // Carro voltou a ficar livre
-        verify(carroRepository, times(1)).save(carroPadrao); // Salvou o status do carro
-        verify(aluguelRepository, times(1)).delete(aluguelPadrao); // Deletou o aluguel
+        
+        assertTrue(carroPadrao.getDisponivel()); 
+        verify(carroRepository, times(1)).save(carroPadrao); 
+        verify(aluguelRepository, times(1)).delete(aluguelPadrao); 
     }
 
-    // --- Testes para o método findByUsuarioId ---
+    
 
     @Test
     void deveRetornarAlugueisDoUsuario() {
