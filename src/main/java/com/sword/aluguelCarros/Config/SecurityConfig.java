@@ -48,8 +48,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/usuario/login",
                                 "/usuario/cadastro",
-                                "teste",
-                                "carro"
+                                "/teste",
+                                "/teste/**",
+                                "/carro",
+                                "/carro/**"
                         ).permitAll()
 
                         .anyRequest().authenticated()
