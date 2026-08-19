@@ -33,4 +33,7 @@ public class Carro {
 
     @Column(nullable = false)
     private Boolean disponivel;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private Boolean arquivado = false;
 }
