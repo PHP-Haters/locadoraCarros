@@ -76,6 +76,13 @@ public class CarroService {
         carroRepository.delete(delete);
     }
 
+    public void arquivar(Integer id) {
+        Carro carro = findById(id);
+        carro.setArquivado(true);
+        carro.setDisponivel(false);
+        carroRepository.save(carro);
+    }
+
     public List<Carro> findByDisponiveis() {
         List<Carro> disponiveis = carroRepository.findByDisponivel(true);
         if (disponiveis.isEmpty()) {

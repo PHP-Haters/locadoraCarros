@@ -49,9 +49,12 @@ public class SecurityConfig {
                                 "/usuario/login",
                                 "/usuario/cadastro",
                                 "/teste",
-                                "/teste/**",
-                                "/carro",
-                                "/carro/**"
+                                "/teste/**"
+                        ).permitAll()
+
+                        // Apenas GET em /carro é público
+                        .requestMatchers(org.springframework.http.HttpMethod.GET,
+                                "/carro", "/carro/**"
                         ).permitAll()
 
                         .anyRequest().authenticated()

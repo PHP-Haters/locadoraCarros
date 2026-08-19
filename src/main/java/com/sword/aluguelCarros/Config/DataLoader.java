@@ -23,7 +23,8 @@ public class DataLoader {
                         "Siena",
                         "Fiat",
                         100.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -31,7 +32,8 @@ public class DataLoader {
                         "Onix",
                         "Chevrolet",
                         120.0F,
-                        true
+                        true,
+                        false
                 ));
 
 
@@ -40,7 +42,8 @@ public class DataLoader {
                         "Polo",
                         "Volkswagen",
                         125.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -48,7 +51,8 @@ public class DataLoader {
                         "Corolla",
                         "Toyota",
                         180.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -56,7 +60,8 @@ public class DataLoader {
                         "Civic",
                         "Honda",
                         200.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -64,7 +69,8 @@ public class DataLoader {
                         "T-Cross",
                         "Volkswagen",
                         170.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -72,7 +78,8 @@ public class DataLoader {
                         "Creta",
                         "Hyundai",
                         190.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -80,7 +87,8 @@ public class DataLoader {
                         "Tracker",
                         "Chevrolet",
                         180.0F,
-                        true
+                        true,
+                        false
                 ));
 
                 carroRepository.save(new Carro(
@@ -88,7 +96,8 @@ public class DataLoader {
                         "Compass",
                         "Jeep",
                         240.0F,
-                        true
+                        true,
+                        false
                 ));
 
 
@@ -97,6 +106,7 @@ public class DataLoader {
                         "Renegade",
                         "Jeep",
                         190.0F,
+                        false,
                         false
                 ));
 
@@ -105,7 +115,8 @@ public class DataLoader {
                         "Audi A3",
                         "Audi",
                         300.0F,
-                        true
+                        true,
+                        false
                 ));
             }
         };

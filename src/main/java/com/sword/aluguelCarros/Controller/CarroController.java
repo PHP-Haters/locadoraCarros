@@ -64,4 +64,12 @@ public class CarroController {
         carroService.delete(id);
         return ResponseEntity.noContent().build(); // status 204
     }
+
+    // Arquivar carro (soft delete - apenas marca como arquivado)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}/arquivar")
+    public ResponseEntity<String> arquivar(@PathVariable Integer id) {
+        carroService.arquivar(id);
+        return new ResponseEntity<>("Carro arquivado com sucesso.", HttpStatus.OK);
+    }
 }
