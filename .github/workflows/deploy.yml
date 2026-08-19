@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - Test & Deploy Bare Metal
+name: CI/CD Pipeline - Deploy to Google Cloud Run
 
 on:
   push:
@@ -9,58 +9,43 @@ jobs:
   test-and-deploy:
     name: Build, Test and Deploy
     runs-on: ubuntu-latest
-    environment: AWS
 
     steps:
       - name: Checkout do Código
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Configurar Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: maven
 
       # -------------------------------------------------------------
-      # 1. ETAPA DE TESTES (Qualquer falha aqui aborta o deploy)
+      # 1. ETAPA DE TESTES (Abortará o deploy caso algum teste falhe)
       # -------------------------------------------------------------
       - name: Executar Testes Automatizados
         run: mvn test
 
       # -------------------------------------------------------------
-      # 2. ETAPA DE COMPILAÇÃO
+      # 2. AUTENTICAÇÃO NO GOOGLE CLOUD
       # -------------------------------------------------------------
-      - name: Gerar Pacote JAR
-        run: mvn package -DskipTests # Os testes já rodaram na etapa anterior
+      - name: Autenticar no Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configurar Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       # -------------------------------------------------------------
-      # 3. ETAPA DE DEPLOY
+      # 3. DEPLOY AUTOMÁTICO NO GOOGLE CLOUD RUN
       # -------------------------------------------------------------
-      - name: Enviar JAR para o Servidor Ubuntu
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          source: "target/*.jar"
-          target: "/var/www/minha-api/"
-          strip_components: 1
-
-      - name: Atualizar Executável e Reiniciar Serviço
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            # Padroniza o nome do pacote para o systemd encontrar
-            mv /var/www/minha-api/*.jar /var/www/minha-api/app.jar
-            
-            # Reinicia o serviço
-            sudo systemctl restart minha-api
-            
-            # Checa o status do serviço
-            sudo systemctl status minha-api --no-pager
+      - name: Deploy no Cloud Run
+        run: |
+          gcloud run deploy backend-aluguel-carros \
+            --source . \
+            --region us-central1 \
+            --memory 1Gi \
+            --allow-unauthenticated \
+            --set-env-vars="SPRING_DATASOURCE_URL=jdbc:mysql://35.254.139.121:3306/aluguel_carros?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC,SPRING_DATASOURCE_USERNAME=admin,SPRING_DATASOURCE_PASSWORD=uniroot"
